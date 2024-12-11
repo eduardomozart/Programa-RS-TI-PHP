@@ -253,7 +253,7 @@ $produto = $data['produto'] ?? null;
                         echo '<label>
                                 <input type="checkbox" value="' . $categoria->id . '" name="categorias[]">'
                                 . $categoria->nome .
-                                '<button type="button" class="edit-btn" onclick="editCategoryModal()">Editar</button>
+                                '<button type="button" class="edit-btn">Editar</button>
                             </label>';
                     }
                     ?>
