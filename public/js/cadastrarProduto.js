@@ -11,22 +11,14 @@ window.addEventListener('load', function () {
     const overlay = document.querySelector('.modal-overlay');
     const editCategoryName = document.getElementById('editCategoryName');
     let currentLabel;
+    onEditCategoryModal();
 
     document.getElementById('add-btn').addEventListener('click', function (event) {
         event.stopImmediatePropagation(); // Não expandir menu suspenso ao clicar no link de Adicioanr
         document.getElementById('modal-header').innerText = 'Adicionar categoria';
+        editCategoryName.value = ''; // Remove o texto da caixa de texto da Modal
         modal.style.display = 'block';
         overlay.style.display = 'block';
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            document.getElementById('modal-header').innerText = 'Editar categoria';
-            modal.style.display = 'block';
-            overlay.style.display = 'block';
-            currentLabel = this.parentElement;
-            editCategoryName.value = currentLabel.textContent.trim().slice(0, this.textContent.length);
-        });
     });
 
     document.getElementById('editCategoryName').addEventListener('click', function () {
@@ -37,6 +29,7 @@ window.addEventListener('load', function () {
     document.getElementById('closeModal').addEventListener('click', function () {
         modal.style.display = 'none';
         overlay.style.display = 'none';
+        currentLabel = undefined;
     });
 
     document.getElementById('saveCategory').addEventListener('click', function () {
@@ -53,6 +46,7 @@ window.addEventListener('load', function () {
                     ${newName}
                     <button type="button" class="edit-btn">Editar</button>
                 </label>`;
+                onEditCategoryModal();
             }
             modal.style.display = 'none';
             overlay.style.display = 'none';
@@ -66,6 +60,19 @@ window.addEventListener('load', function () {
             dropdown.classList.remove('open');
             modal.style.display = 'none';
             overlay.style.display = 'none';
+            currentLabel = undefined;
         }
     });
+
+    function onEditCategoryModal() {
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('modal-header').innerText = 'Editar categoria';
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+                currentLabel = this.parentElement;
+                editCategoryName.value = currentLabel.textContent.trim().slice(0, this.textContent.length);
+            });
+        });
+    }
 });
