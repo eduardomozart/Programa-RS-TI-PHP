@@ -34,23 +34,40 @@ window.addEventListener('load', function () {
 
     document.getElementById('saveCategory').addEventListener('click', function () {
         const newName = editCategoryName.value.trim();
-        if (newName) {
-            if (currentLabel && currentLabel.hasChildNodes()) {
+        if (newName) { // Se foi digitado algum texto no input do nome da categoria
+            if (typeof(currentLabel) !== 'undefined') {
                 // Se for edição de categoria (elemento já existe)
-                currentLabel.childNodes[2].nodeValue = ` ${newName} `;
-                currentLabel = undefined;
+                let oldName = currentLabel.textContent.trim();
+                oldName = oldName.slice(0, oldName.length - document.querySelectorAll('.edit-btn')[0].textContent.length);
+                if (newName !== oldName) {
+                    let idCategoria = currentLabel.childNodes[1].value;
+                    let urlAPI = `/API/JSON/Categoria/editCategory/${idCategoria}/${newName}`;
+                    $.getJSON(urlAPI, function(data) {
+                        // Se a chamada de API foi bem-sucedida, ou seja,
+                        // O nome da categoria foi alterada ao banco de dados.
+                        // Altera o nome da categoria no HTML da página:
+                        currentLabel.childNodes[2].nodeValue = `${newName}`;
+                        currentLabel = undefined;
+                    });
+                }
             } else {
                 // Se for adição de categoria
-                dropdown.innerHTML += `<label>
-                    <input type="checkbox" value="${newName}" name="categorias[]">
-                    ${newName}
-                    <button type="button" class="edit-btn">Editar</button>
-                </label>`;
-                onEditCategoryModal();
+                let urlAPI = `/API/JSON/Categoria/addCategory/${newName}`;
+                $.getJSON(urlAPI, function(data) {
+                    // O Backend retorna "-1" se a categoria já existe no banco de dados.
+                    if (data !== -1) {
+                        dropdown.innerHTML += `<label>
+                            <input type="checkbox" value="${data}" name="categorias[]">
+                            ${newName}
+                            <button type="button" class="edit-btn">Editar</button>
+                        </label>`;
+                        onEditCategoryModal();
+                    }
+                });
             }
-            modal.style.display = 'none';
-            overlay.style.display = 'none';
         }
+        modal.style.display = 'none';
+        overlay.style.display = 'none';
     });
 
     // Fechar o menu se clicar fora dele
@@ -71,7 +88,7 @@ window.addEventListener('load', function () {
                 modal.style.display = 'block';
                 overlay.style.display = 'block';
                 currentLabel = this.parentElement;
-                editCategoryName.value = currentLabel.textContent.trim().slice(0, this.textContent.length);
+                editCategoryName.value = currentLabel.textContent.trim().slice(0, currentLabel.textContent.trim().length - this.textContent.length).trim();
             });
         });
     }

@@ -23,6 +23,7 @@ $produto = $data['produto'] ?? null;
         }
         ?>
     </title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/js/cadastrarProduto.js" defer="defer"></script>
     <style>
         body {
@@ -74,14 +75,14 @@ $produto = $data['produto'] ?? null;
         button {
             margin-top: 20px;
             /* background-color: #28a745; */
-            color: white;
+            /* color: white; */
             font-weight: bold;
             cursor: pointer;
         }
 
         /* button:hover {
-    background-color: #218838;
-} */
+            background-color: #218838;
+        } */
 
         /* Placeholders */
         ::placeholder,
